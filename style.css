@@ -1,0 +1,9 @@
+body {
+    margin: 0px !important;
+    background-color: dimgray;
+}
+#TicTacToe_root {
+    width: 100vmin;
+    aspect-ratio: 1;
+    margin: auto;
+}

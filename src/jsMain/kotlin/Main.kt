@@ -85,21 +85,21 @@ fun main() {
                 Tr {
                     Td({ style { width(33.percent); border(5.px, LineStyle.Solid, Color.black); textAlign("center") } }) {
                         Button({
-                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white) }
+                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white); property("font-size", "x-large") }
                         }) {
                             Text("Player vs Player")
                         }
                     }
                     Td({ style { width(33.percent); border(5.px, LineStyle.Solid, Color.black); textAlign("center") } }) {
                         Button({
-                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white) }
+                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white); property("font-size", "x-large") }
                         }) {
                             Text("2")
                         }
                     }
                     Td({ style { width(33.percent); border(5.px, LineStyle.Solid, Color.black); textAlign("center") } }) {
                         Button({
-                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.tomato); padding(0.px); border(1.px, LineStyle.Solid, Color.white) }
+                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.tomato); padding(0.px); border(1.px, LineStyle.Solid, Color.white); property("font-size", "x-large") }
                             onClick { resetGame() }
                         }) {
                             Text("Reset")
@@ -109,14 +109,14 @@ fun main() {
                 Tr {
                     Td({ style { width(33.percent); border(5.px, LineStyle.Solid, Color.black); textAlign("center") } }) {
                         Button({
-                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white) }
+                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white); property("font-size", "x-large") }
                         }) {
                             Text("4")
                         }
                     }
                     Td({ style { width(33.percent); border(5.px, LineStyle.Solid, Color.black); textAlign("center") } }) {
                         Button({
-                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white) }
+                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white); property("font-size", "x-large") }
                             onClick { swapPlayers() }
                         }) {
                             Text("Swap")
@@ -124,7 +124,7 @@ fun main() {
                     }
                     Td({ style { width(33.percent); border(5.px, LineStyle.Solid, Color.black); textAlign("center") } }) {
                         Button({
-                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white) }
+                            style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white); property("font-size", "x-large") }
                         }) {
                             Text("6")
                         }
@@ -148,7 +148,7 @@ fun main() {
                             }) {
                                 //Text("$i, $j")
                                 Button({
-                                    style { property("aspect-ratio", "1"); width(97.percent); backgroundColor(buttonColors[i][j]); padding(0.px); border(1.px, LineStyle.Solid, Color.white) }
+                                    style { property("aspect-ratio", "1"); width(97.percent); backgroundColor(buttonColors[i][j]); padding(0.px); border(1.px, LineStyle.Solid, Color.white); property("font-size", "xxx-large") }
                                     if (inGame && field[i][j].content == 0) {
                                         onClick {
                                             clickCounter += 1

@@ -3,7 +3,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import org.jetbrains.compose.web.attributes.rowspan
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 import org.jetbrains.compose.web.renderComposable
@@ -21,20 +20,17 @@ fun swapPlayers() {
     displayChar[2] = bufferedChar
 }
 
-class Field(row: Int, col: Int) {
-    val id = row * 3 + col
+class Field {
     var content by mutableStateOf(0)
         private set
     fun setContent() {
         if (currentPlayer == 1) {
             content = 1
             currentPlayer = 2
-            console.log("$id\t $content")
         }
         else if (currentPlayer == 2) {
             content = 2
             currentPlayer = 1
-            console.log("$id\t $content")
         }
     }
 }
@@ -45,14 +41,14 @@ fun buildField() {
     for (r in 0..2) {
         field.add(mutableStateListOf())
         for (c in 0..2) {
-            field[r].add(Field(r, c))
+            field[r].add(Field())
         }
     }
 }
 
 fun checkWin() {
-    if ((0..2).all { field[it][it].content == 1 }) { win(1, "cross"); (0..2).forEach { buttonColors[it][it] = Color.cyan } }
-    if ((0..2).all { field[it][it].content == 2 }) { win(2, "cross"); (0..2).forEach { buttonColors[it][it] = Color.cyan } }
+    if ((0..2).all { field[it][it].content == 1 }) { win(1, "diagonal"); (0..2).forEach { buttonColors[it][it] = Color.cyan } }
+    if ((0..2).all { field[it][it].content == 2 }) { win(2, "diagonal"); (0..2).forEach { buttonColors[it][it] = Color.cyan } }
     for (n in 0..2) {
         if ((0..2).all { field[n][it].content == 1 }) { win(1, "row: ${n+1}"); (0..2).forEach { buttonColors[n][it] = Color.cyan } }
         if ((0..2).all { field[n][it].content == 2 }) { win(2, "row: ${n+1}"); (0..2).forEach { buttonColors[n][it] = Color.cyan } }
@@ -60,9 +56,9 @@ fun checkWin() {
         if ((0..2).all { field[it][n].content == 2 }) { win(2, "col: ${n+1}"); (0..2).forEach { buttonColors[it][n] = Color.cyan } }
     }
     val crossFields = listOf(field[0][2].content, field[1][1].content, field[2][0].content)
-    if (crossFields.all { it == 1 }) { win(1, "cross"); buttonColors[0][2] = Color.cyan; buttonColors[1][1] = Color.cyan; buttonColors[2][0] = Color.cyan }
-    if (crossFields.all { it == 2 }) { win(2, "cross"); buttonColors[0][2] = Color.cyan; buttonColors[1][1] = Color.cyan; buttonColors[2][0] = Color.cyan }
-    if (inGame && clickCounter >= 9) { inGame = false; console.log("No Player has won the game\n Impasse"); buttonColors = (0..2).map { (0..2).map { Color.tomato } as MutableList } as MutableList }
+    if (crossFields.all { it == 1 }) { win(1, "diagonal"); buttonColors[0][2] = Color.cyan; buttonColors[1][1] = Color.cyan; buttonColors[2][0] = Color.cyan }
+    if (crossFields.all { it == 2 }) { win(2, "diagonal"); buttonColors[0][2] = Color.cyan; buttonColors[1][1] = Color.cyan; buttonColors[2][0] = Color.cyan }
+    if (inGame && clickCounter >= 9) { inGame = false; console.log("No Player has won the game\n Impasse"); buttonColors = (0..2).map { (0..2).map { Color.gold } as MutableList } as MutableList }
 }
 
 fun win(winner: Int, comment: String) {

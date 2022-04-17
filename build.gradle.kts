@@ -2,7 +2,8 @@ import org.jetbrains.compose.compose
 
 plugins {
     kotlin("multiplatform") version "1.6.10"
-    id("org.jetbrains.compose") version "1.0.0"
+    id("org.jetbrains.compose") version "1.1.1"
+    kotlin("plugin.serialization") version "1.6.10"
 }
 
 group = "me.hv"
@@ -32,6 +33,7 @@ kotlin {
             dependencies {
                 implementation(compose.web.core)
                 implementation(compose.runtime)
+                implementation("dev.gitlive:firebase-firestore-js:1.5.0")
             }
         }
         val jsTest by getting {

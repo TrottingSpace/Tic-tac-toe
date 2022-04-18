@@ -8,6 +8,8 @@ import dev.gitlive.firebase.FirebaseOptions
 import dev.gitlive.firebase.initialize
 import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -24,6 +26,7 @@ var notPaused by mutableStateOf(true)
 var currentPlayer = 1
 var clickCounter = 0
 val displayChar = mutableStateListOf(' ', 'O', 'X', '?')
+var databaseReadIcon by mutableStateOf("🌐")
 
 var buttonColors = (0..2).map { (0..2).map { Color.transparent } as MutableList } as MutableList
 
@@ -138,7 +141,7 @@ fun main() {
                         Button({
                             style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white); property("font-size", "x-large") }
                         }) {
-                            Text("2")
+                            Text("Now: ${displayChar[currentPlayer]}")
                         }
                     }
                     Td({ style { width(33.percent); border(5.px, LineStyle.Solid, Color.black); textAlign("center") } }) {
@@ -155,22 +158,28 @@ fun main() {
                         Button({
                             style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white); property("font-size", "x-large") }
                             onClick {
-                                notPaused = false
                                 scope.launch {
-                                    foundData = try { readData(SessionID) } catch (e: IllegalArgumentException) { DataStorage(listOf(0, 0, 0, 0, 0, 0, 0, 0, 0), 0, false) }
-                                    for (i in 0..2) {
-                                        for (j in 0..2) {
-                                            field[i][j].loadContent(foundData.dataList[i * 3 + j])
-                                        }
+                                    //foundData = try { readData(SessionID) } catch (e: IllegalArgumentException) { DataStorage(listOf(0, 0, 0, 0, 0, 0, 0, 0, 0), 0, false) }
+                                    try {
+                                        getDataFlow(SessionID).onEach {
+                                            foundData = it
+                                            for (i in 0..2) {
+                                                for (j in 0..2) {
+                                                    field[i][j].loadContent(foundData.dataList[i * 3 + j])
+                                                }
+                                            }
+                                            currentPlayer = foundData.nextPlayer
+                                            inGame = foundData.isGame
+                                            databaseReadIcon = "✅"
+                                        }.collect()
                                     }
-                                    currentPlayer = foundData.nextPlayer
-                                    inGame = foundData.isGame
-                                    notPaused = true
+                                    catch (e: IllegalArgumentException) {
+                                        databaseReadIcon = "❌"
+                                    }
                                 }
-                                checkWin()
                             }
                         }) {
-                            Text("Load")
+                            Text("Load\n$databaseReadIcon")
                         }
                     }
                     Td({ style { width(33.percent); border(5.px, LineStyle.Solid, Color.black); textAlign("center") } }) {

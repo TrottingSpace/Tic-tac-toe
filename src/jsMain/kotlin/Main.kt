@@ -1,6 +1,6 @@
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import dev.gitlive.firebase.Firebase
@@ -123,8 +123,23 @@ fun main() {
     console.log("%c Welcome in Tic-tac-toe! ", "color: white; font-weight: bold; background-color: black;")
     buildField()
     //console.log(window.location.search)
-    console.log(window.location.hostname)
+    console.log(window.location.hostname + window.location.pathname)
     console.log(urlGameID)
+
+    scope.launch {
+        //foundData = try { readData(SessionID) } catch (e: IllegalArgumentException) { DataStorage(listOf(0, 0, 0, 0, 0, 0, 0, 0, 0), 0, false) }
+        getDataFlow(SessionID).onEach {
+            foundData = it
+            for (i in 0..2) {
+                for (j in 0..2) {
+                    field[i][j].loadContent(foundData.dataList[i * 3 + j])
+                }
+            }
+            currentPlayer = foundData.nextPlayer
+            inGame = foundData.isGame
+            databaseReadIcon = "✅"
+        }.collect()
+    }
 
     renderComposable(rootElementId = "TicTacToe_root") {
         Div({ style { padding(25.px) } }) {
@@ -157,29 +172,8 @@ fun main() {
                     Td({ style { width(33.percent); border(5.px, LineStyle.Solid, Color.black); textAlign("center") } }) {
                         Button({
                             style { property("aspect-ratio", "2"); width(90.percent); backgroundColor(Color.transparent); padding(0.px); border(1.px, LineStyle.Solid, Color.white); property("font-size", "x-large") }
-                            onClick {
-                                scope.launch {
-                                    //foundData = try { readData(SessionID) } catch (e: IllegalArgumentException) { DataStorage(listOf(0, 0, 0, 0, 0, 0, 0, 0, 0), 0, false) }
-                                    try {
-                                        getDataFlow(SessionID).onEach {
-                                            foundData = it
-                                            for (i in 0..2) {
-                                                for (j in 0..2) {
-                                                    field[i][j].loadContent(foundData.dataList[i * 3 + j])
-                                                }
-                                            }
-                                            currentPlayer = foundData.nextPlayer
-                                            inGame = foundData.isGame
-                                            databaseReadIcon = "✅"
-                                        }.collect()
-                                    }
-                                    catch (e: IllegalArgumentException) {
-                                        databaseReadIcon = "❌"
-                                    }
-                                }
-                            }
                         }) {
-                            Text("Load\n$databaseReadIcon")
+                            Text("Status: $databaseReadIcon")
                         }
                     }
                     Td({ style { width(33.percent); border(5.px, LineStyle.Solid, Color.black); textAlign("center") } }) {

@@ -1,7 +1,7 @@
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,6 +13,6 @@ suspend fun writeData(id: String, dataStorage: DataStorage) {
 suspend fun readData(id: String): DataStorage {
     return Firebase.firestore.collection(GAMES).document(id).get().data()
 }
-suspend fun getDataFlow(id: String): Flow<DataStorage> {
-    return Firebase.firestore.collection(GAMES).document(id).snapshots.map { it.data() }
+fun getDataFlow(id: String): Flow<DataStorage> {
+    return Firebase.firestore.collection(GAMES).document(id).snapshots.mapNotNull { it.takeIf { it.exists }?.data() }
 }
